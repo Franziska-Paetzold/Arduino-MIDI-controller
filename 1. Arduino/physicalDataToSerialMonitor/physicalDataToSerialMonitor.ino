@@ -1,6 +1,6 @@
 #include <Ultrasonic.h>
 
-//sensors from left to right
+//sensors from left to right, information for the colors of the wires behind
 int triggerA=13;  //yellow, yellow
 int echoA=12; //white white
 
@@ -17,6 +17,8 @@ Ultrasonic sigE(4);  //white, whihte
 long duration=0; 
 long distance=0; 
 
+String outputString = "";
+
 void setup()
 {
   Serial.begin (9600); 
@@ -32,16 +34,24 @@ void setup()
 
 void loop()
 {   
-    ultrasonic_normal(triggerA, echoA, 200);
-    ultrasonic_grove(sigB, 201);
-    ultrasonic_normal(triggerC, echoC, 202);
-    ultrasonic_normal(triggerD, echoD, 203);
-    ultrasonic_grove(sigE, 204);   
+
+    //get distance 
+    ultrasonic_normal(triggerA, echoA);
+    ultrasonic_grove(sigB);
+    ultrasonic_normal(triggerC, echoC);
+    ultrasonic_normal(triggerD, echoD);
+    ultrasonic_grove(sigE); 
+
+    //line break after every sensor is has checked for an obstacle once 
+    outputString += "\n";
+    //Serial.write() for the whole string
+    writeString(outputString);
+    
     delay(500); 
 }
 
 //works for HC-SR05s
-void ultrasonic_normal(int trigger,int echo,int index)
+void ultrasonic_normal(int trigger,int echo)
 {
   digitalWrite(trigger, LOW); 
   delay(5); 
@@ -50,20 +60,23 @@ void ultrasonic_normal(int trigger,int echo,int index)
   digitalWrite(trigger, LOW);
   duration = pulseIn(echo, HIGH); 
   distance = (duration/2) * 0.03432; 
-  
-  Serial.write(index); 
-  if (distance < 100)
-  {
-    Serial.write(distance);
-  }
+
+  outputString += String(distance) + "/";
 }
 
-void ultrasonic_grove(Ultrasonic ultrasonic, int index)
+void ultrasonic_grove(Ultrasonic ultrasonic)
 {
   distance = ultrasonic.MeasureInCentimeters(); 
-  Serial.write(index);
-  if (distance < 100)
+  outputString += String(distance) + "/";
+}
+
+// Used to serially push out a String with Serial.write()
+void writeString(String stringData) 
+{ 
+  for (int i = 0; i < stringData.length(); i++)
   {
-    Serial.write(distance);
-  }
+    // Push each char 1 by 1 on each loop pass
+    Serial.write(stringData[i]);   
+  } 
+  outputString = "";
 }
