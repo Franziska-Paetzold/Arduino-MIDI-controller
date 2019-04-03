@@ -57,7 +57,7 @@ void draw()
   {  
     String inBuffer = myPort.readStringUntil(10);   
     if (inBuffer != null) {
-      println("new: " + inBuffer);
+     // println("new: " + inBuffer);
       distances = serialStringtoIntArray(inBuffer);
       distances = setBoundaries(distances, maxDistance);
       if (distances != null)
@@ -65,6 +65,7 @@ void draw()
        // playNotes(distances);
        chromaticScaleAndVolume(distances);
       }
+      println("new and edited:" + distances[0], distances[1], distances[2], distances[3], distances[4]);
       distances = null;
     }
   }  
@@ -80,9 +81,7 @@ int[] serialStringtoIntArray(String string)
   for (int i=0; i < string.length(); i++)
   {
     if(string.charAt(i) == '/')
-    {
-      //ToDO
-      
+    {      
       try 
       {
         data[indexCounter] = int(distanceString);
@@ -208,57 +207,70 @@ void playNotes(int[] array)
 //calculates 12 semitones and plays the volume depending on the distance to the sensors 
 void chromaticScaleAndVolume(int[] data)
 {
+
   int[] y= data;
   //stores positions on x axis
-  int[] x = new int[12];
+  float[] x = new float[12];
+  //fill the array first
   for (int i=0; i<x.length; i++)
   {
-    int currY=0;
-    x[i]=y.length/12*i;
+    //todo, why always 0?
+    x[i]=data.length/12.0*float(i);
+  }
+  
+  println("x array: ");
+  for (int i=0; i<x.length; i++)
+  {
+    print(x[i]);
+  }
+  
+  for (int i=0; i<x.length; i++)
+  {
+    float currY=0;
     
     //interpolate between sensors via functional equations to set volume
-    currY  = getY(x,y,i);
+    //currY  = getY(x,y,i);
     
     //sent MIDIs
     changeVolume(currY);
-    if (x[i]>0)
+    if (i>0)
     {
-      noteOn(x[i]);
+      noteOn(i);
     }
     else
     {
-      noteOff(x[i]);
+      noteOff(i);
     }
   }
 }
 
-int getY(int[] x, int[] y, int i)
+float getY(float[] x, int[] y, int i)
 {
-  int currY = 0;
+  float currY = 0;
   if(x[i]>=x[0] && x[i]<x[1])
   {
     currY = calcFunctionalEquation(x[0], y[0], x[1], y[1], x[i]);
   }
   if(x[i]>=x[1] && x[i]<x[2])
   {
-    currY = calcFunctionalEquation(x[0], y[0], x[1], y[1], x[i]);
+    currY = calcFunctionalEquation(x[1], y[1], x[2], y[2], x[i]);
   }
   if(x[i]>=x[2] && x[i]<x[3])
   {
-    currY = calcFunctionalEquation(x[0], y[0], x[1], y[1], x[i]);
+    currY = calcFunctionalEquation(x[2], y[2], x[3], y[3], x[i]);
   }
   if(x[i]>=x[3] && x[i]<=x[4])
   {
-    currY = calcFunctionalEquation(x[0], y[0], x[1], y[1], x[i]);
+    currY = calcFunctionalEquation(x[3], y[3], x[4], y[4], x[i]);
   }
   return currY;
 }
 
-int calcFunctionalEquation(int x1, int y1, int x2, int y2, int currX)
+float calcFunctionalEquation(float x1, int y1, float x2, int y2, float currX)
 {
-  int currY = 0;
-  int n=0;
-  int m=0;
+  float currY = 0;
+  float n=0;
+  float m=0;
   
   try 
   {
@@ -266,11 +278,10 @@ int calcFunctionalEquation(int x1, int y1, int x2, int y2, int currX)
   } 
   catch (ArithmeticException e) 
   {
-    e.printStackTrace();
+   // e.printStackTrace();
     print(x2, x1);
     return currY;
-  }
-  
+  }  
  
   n =y2-m*x2;
   //calculate current y 
@@ -278,7 +289,7 @@ int calcFunctionalEquation(int x1, int y1, int x2, int y2, int currX)
   return currY;
 }
 
-void changeVolume(int data)
+void changeVolume(float data)
 {
   int mappedVal = mapOneByte(data, maxDistance);
   myBus.sendControllerChange(channel, 7, mappedVal);
@@ -302,8 +313,9 @@ void delay(int time)
   while (millis () < current+time) Thread.yield();
 }
 
-int mapOneByte(int val, int max)
+int mapOneByte(float val, int max)
 {
+  print("val: "+ val);
   float processedVal = map(val, 0, max, 0, 255);
   return int(processedVal);
 }
