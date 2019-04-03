@@ -18,11 +18,6 @@ int maxDistance = 30;
 int[] chromaticScale={60,61,62,63,64,65,66,67,68,69,70,71};
 int[] diatonicScale={60,62,64,65,67,69,71};
 
-boolean eIsPlaying = false;
-boolean gIsPlaying = false;
-
-//TODO: play note constantly till obstacle moves away 
-
 
 void setup() 
 {
@@ -36,9 +31,7 @@ void setup()
     e.printStackTrace();
     portName = null;
   }
-  
-  
-  
+   
   myBus = new MidiBus(this, -1, "arduinoToLive Port"); 
 }
 
@@ -71,6 +64,12 @@ void draw()
   }  
   
 }
+
+//##################################################################################################################################
+//##################################################################################################################################
+//######################## functions to convert the physical, serial data into usable data #########################################
+//##################################################################################################################################
+//##################################################################################################################################
 
 int[] serialStringtoIntArray(String string)
 {
@@ -115,106 +114,31 @@ int[] setBoundaries (int[] array, int max)
   return array;
 }
 
-/*
-
-void playNotes(int[] array)
+int mapOneByte(float val, int max)
 {
-  int velocity = 127;
-  int pitch = 0;
-  
-  //check for e 
-  if  ((array[1] > 0) && (array[2] > 0))
-  {
-    eIsPlaying = true;
-  }
-  else
-  {
-    eIsPlaying = false;
-  }
-  
-  //check for g
-  if  ((array[2] > 0) && (array[3] > 0))
-  {
-    gIsPlaying = true;
-  }
-  else
-  {
-    gIsPlaying = false;
-  }
-  
-  for (int i=0; i<array.length; i++)
-  {
-   switch(i) 
-   {
-    case 0: 
-    //C4
-      pitch = 60;
-      break;
-    case 1: 
-      pitch = 62;  
-      break;
-    case 2:
-      pitch = 65;
-      break;
-    case 3:
-      pitch = 69;
-    case 4:
-      pitch =71;
-      
-    
-   }
-    
-   //### volume change ###
-   //control volume alias cc7
-   int mappedVal = mapOneByte(array[i], maxDistance);
-   myBus.sendControllerChange(channel, 7, mappedVal);
-   //### volume change end ###
-   
-   //play note costantly till obstacle moves away
-   if (array[i] > 0)
-   {
-     myBus.sendNoteOn(channel, pitch, velocity); 
-   }
-   else
-   {
-     myBus.sendNoteOff(channel, pitch, velocity); 
-   }
-   
-  //play inbetweenies
-   
-   if (eIsPlaying)
-   {
-     myBus.sendNoteOn(channel, 64, velocity); 
-   }
-   else
-   {
-     myBus.sendNoteOff(channel, 64, velocity);
-   }
-   
-   if (gIsPlaying)
-   {
-     myBus.sendNoteOn(channel, 67, velocity); 
-   }
-   else
-   {
-     myBus.sendNoteOff(channel, 67, velocity);
-   }
-   
-  }
+  print("val: "+ val);
+  float processedVal = map(val, 0, max, 0, 255);
+  return int(processedVal);
 }
-*/
+
+//##################################################################################################################################
+//##################################################################################################################################
+//###################################################### process data ##############################################################
+//##################################################################################################################################
+//##################################################################################################################################
+
+
 
 //calculates 12 semitones and plays the volume depending on the distance to the sensors 
 void chromaticScaleAndVolume(int[] data)
 {
-
+  //distances array
   int[] y= data;
   //stores positions on x axis
   float[] x = new float[12];
   //fill the array first
   for (int i=0; i<x.length; i++)
   {
-    //todo, why always 0?
     x[i]=data.length/12.0*float(i);
   }
   
@@ -229,7 +153,7 @@ void chromaticScaleAndVolume(int[] data)
     float currY=0;
     
     //interpolate between sensors via functional equations to set volume
-    //currY  = getY(x,y,i);
+    currY  = getY(x,y,i);
     
     //sent MIDIs
     changeVolume(currY);
@@ -243,6 +167,11 @@ void chromaticScaleAndVolume(int[] data)
     }
   }
 }
+
+
+//################################################# process data help functions #####################################################
+
+
 
 float getY(float[] x, int[] y, int i)
 {
@@ -289,6 +218,16 @@ float calcFunctionalEquation(float x1, int y1, float x2, int y2, float currX)
   return currY;
 }
 
+
+
+
+
+//##################################################################################################################################
+//##################################################################################################################################
+//########################################### functions to send MIDI data ##########################################################
+//##################################################################################################################################
+//##################################################################################################################################
+
 void changeVolume(float data)
 {
   int mappedVal = mapOneByte(data, maxDistance);
@@ -305,17 +244,4 @@ void noteOff(int data)
 {
   int pitch = chromaticScale[data]; 
   myBus.sendNoteOff(channel, pitch, 127); 
-}
-
-void delay(int time) 
-{
-  int current = millis();
-  while (millis () < current+time) Thread.yield();
-}
-
-int mapOneByte(float val, int max)
-{
-  print("val: "+ val);
-  float processedVal = map(val, 0, max, 0, 255);
-  return int(processedVal);
 }
