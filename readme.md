@@ -18,6 +18,7 @@ Jump dicectly to:
 - accord (dis3, g3, ais3, C4, D4 - a major 7 accord) and volume 
 - accord and octaves
 - manual mode 
+
 `Hint: The first four modes work only witha //todo plugin. If you are choosing the manual mode you can map any functionalily by use the //todo Max for Live device.`
 
 2. Use one or more hands to play. The distance range is from the sensors up to 50cm. 
