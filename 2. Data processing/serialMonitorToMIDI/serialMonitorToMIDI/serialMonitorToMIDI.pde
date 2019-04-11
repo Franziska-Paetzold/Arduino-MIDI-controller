@@ -65,6 +65,7 @@ void draw()
       if (distances != null)
       {
         mode = setMode(potValue);
+        println("mode: " + mode);
         switch(mode) 
         {
           case 0: 

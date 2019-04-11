@@ -1,5 +1,9 @@
 #include <Ultrasonic.h>
 
+//potentiometer
+int pot =0; //green, yellow
+int potValue =0;
+
 //sensors from left to right, information for the colors of the wires behind
 int triggerA=13;  //yellow, yellow
 int echoA=12; //white white
@@ -34,7 +38,11 @@ void setup()
 
 void loop()
 {   
-
+    //poti value
+    potValue = analogRead(pot);
+    outputString += String(potValue);
+    outputString += "/";
+    
     //get distance 
     ultrasonic_normal(triggerA, echoA);
     ultrasonic_grove(sigB);

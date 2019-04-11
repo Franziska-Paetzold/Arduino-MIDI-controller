@@ -1,5 +1,9 @@
 #include <Ultrasonic.h>
 
+//potentiometer
+int pot =0; //green, yellow
+int potValue =0;
+
 //sensors from left to right
 int triggerA=13;  //yellow, yellow
 int echoA=12; //white white
@@ -31,16 +35,16 @@ void setup()
 }
 
 void loop()
-{
-  
-    
+{    
     ultrasonic_normal(triggerA, echoA, "A");
     ultrasonic_grove(sigB, "B");
     ultrasonic_normal(triggerC, echoC, "C");
     ultrasonic_normal(triggerD, echoD, "D");
     ultrasonic_grove(sigE, "E");
-
     
+    Serial.print("Poti: "); 
+    potValue = analogRead(pot);
+    Serial.println(potValue);
 }
 
 //works for HC-SR05s
@@ -54,7 +58,7 @@ void ultrasonic_normal(int trigger,int echo,String indexLetter)
   duration = pulseIn(echo, HIGH); 
   distance = (duration/2) * 0.03432; 
   
-  if (distance == -1 or distance == 0 or distance > 100) 
+  if (distance == -1 or distance == 0 ) 
   {
     Serial.print(indexLetter); 
     Serial.println(" not working: no value");
@@ -72,7 +76,7 @@ void ultrasonic_normal(int trigger,int echo,String indexLetter)
 void ultrasonic_grove(Ultrasonic ultrasonic, String indexLetter)
 {
   distance = ultrasonic.MeasureInCentimeters(); 
-  if (distance == -1 or distance == 0 or distance > 100) 
+  if (distance == -1 or distance == 0 ) 
   {
     Serial.print(indexLetter); 
     Serial.println(" not working: no value");
