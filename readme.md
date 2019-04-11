@@ -19,7 +19,7 @@ Jump dicectly to:
 - accord and octaves
 - manual mode 
 
-`Hint: The first four modes work only with a synthesizer that recognizes CC7 (interpretation als volume change). If you are choosing the manual mode you can map any functionalily by use the //todo Max for Live device.`
+`Hint: The first four modes work only with a synthesizer that recognizes CC7 (interpretation als volume change). If you are choosing the manual mode you can map any functionalily.`
 
 2. Use one or more hands to play. The distance range is from the sensors up to 50cm. 
 
@@ -75,7 +75,7 @@ Measurements for HC-SR05s:
 
 - Start the Arduino IDE. Optionally open the check_all_Sensors.ino, uploaded to your Arduino and read out the serial monitor. After that, close the monitor and open the physicalDataToSerialMonitor.ino. Upload it (attention: this time you have to make sure, that the serial monitor is not opened). You can close the Arduino IDE now.
 
-`Hint: This works without issues for the original prototype. If you buildt your own one, plpease make sure to make some adjustments in the code at this point. Implement the correct way for the kind of ultrasonic sensor, that you are using."
+`Hint: This works without issues for the original prototype. If you buildt your own one, plpease make sure to make some adjustments in the code at this point. Implement the correct way for the kind of ultrasonic sensor, that you are using.`
 
 - Open loopMIDI add a virtual port by typing a name in the input field and selecting the +-button. You can close loopMIDI now.
 
@@ -85,7 +85,7 @@ Measurements for HC-SR05s:
 
 - Choose or install  a plugin, that recognizes CC7, for instance [prophet](https://www.arturia.com/products/analog-classics/prophet-v).
 
-- Add M4L tool //todo link. Map functionality if you want to.
+- If you want to use the manual mapping mode, click the "MIDI" button in the upper right corner. Now everything you can map is purple. Map functionality you want to by choosing a purple highlighted tool and using the controller in one direction.
 
 
 #### Have fun. 
