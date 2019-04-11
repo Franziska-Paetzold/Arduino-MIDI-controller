@@ -18,7 +18,7 @@ Jump dicectly to:
 - accord (dis3, g3, ais3, C4, D4 - a major 7 accord) and volume 
 - accord and octaves
 - manual mode 
-`Hint: The first four modes work only witha //todo plugin. If you are choosing the manual mode you can map any functionalily by use the //todo Max for Live device."
+`Hint: The first four modes work only witha //todo plugin. If you are choosing the manual mode you can map any functionalily by use the //todo Max for Live device.`
 
 2. Use one or more hands to play. The distance range is from the sensors up to 50cm. 
 
@@ -46,7 +46,7 @@ optional:
 #### Biuld a case
 Let creativity run free, but here is a little help to cut the gaps for the ultrasonic sensors.
 
-//todo add picture
+![build_a_case](https://user-images.githubusercontent.com/22836416/55933780-cf703880-5c2e-11e9-884c-be663f515e7c.png)
 
 For boths kinds of sensors the distance from A to D is 5cm and the radius is 0,8cm.
 
