@@ -16,6 +16,7 @@ int[] distances = new int[5];
 int maxDistance = 50;
 int potValue =0;
 int mode ;
+int [] pitches = new int[12];
 
 //MIDI note numbers from C4 to B4 
 int[] chromaticScale={72,73,74,75,76,77,78,79,80,81,82,83};
@@ -60,7 +61,7 @@ void draw()
       potValue = data[0];
       //add distances to distance array
       distances = subset(data, 1);
-      distances = setBoundaries(distances, maxDistance); //<>//
+      distances = setBoundaries(distances, maxDistance);
       //println("new and edited:" + distances[0], distances[1], distances[2], distances[3], distances[4]);
       if (distances != null)
       {
@@ -274,37 +275,49 @@ void accordAndVolume(int[] distances)
   }
 }
 
-//TODO
+
 void accordAndOctave(int[] distances)
 {
   //mid volmue
   changeVolume(25);
+  int pitch;
   
   for (int i=0; i<distances.length; i++)
   {
     if(distances[i]>0 && distances[i]<=10)
       {
-        noteOn(accord[i]);
+        pitch =accord[i];
+        setPitches(i, pitch);
+        noteOn(pitch);
       } 
     else if(distances[i]>10 && distances[i]<=20)
       {
-        noteOn(accord[i]+12);
+        pitch =accord[i]+12;
+        setPitches(i, pitch);
+        noteOn(pitch);
       }
     else if(distances[i]>20 && distances[i]<=30)
       {
-        noteOn(accord[i]+12*2);
+        pitch =accord[i]+12*2;
+        setPitches(i, pitch);
+        noteOn(pitch);
       } 
     else if(distances[i]>30 && distances[i]<=40)
       {
-        noteOn(accord[i]+12*3);
+        pitch =accord[i]+12*3;
+        setPitches(i, pitch);
+        noteOn(pitch);
       }
     else if(distances[i]>40 && distances[i]<=50)
       {
-        noteOn(accord[i]+12*4);
+        pitch =accord[i]+12*4;
+        setPitches(i, pitch);
+        noteOn(pitch);
       }
     else
       {
         noteOff(accord[i]);
+        noteOff(pitches[i]); //<>//
       }
   }
 }
@@ -366,6 +379,12 @@ float calcFunctionalEquation(float x1, int y1, float x2, int y2, float currX)
   //calculate current y 
   currY = m*currX+n;
   return currY;
+}
+
+
+void setPitches(int index, int pitch)
+{
+  pitches[index] = pitch;
 }
 
 
