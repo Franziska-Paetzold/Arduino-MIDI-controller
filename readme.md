@@ -2,6 +2,8 @@
 
 The MMD is a tool to make sound via a self-made MIDI device. There are different modes offered to adjust your sound file or creating sounds.
 
+![franzi1](https://user-images.githubusercontent.com/22836416/61169582-a928a480-a55f-11e9-87ac-04ec64b8d7cf.png)
+
 Impression: https://youtu.be/YaeJ_txb2Yo
 
 Jump dicectly to:
