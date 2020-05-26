@@ -6,7 +6,7 @@ The MMD is a tool to make sound via a self-made MIDI device. There are different
 
 Impression: https://youtu.be/YaeJ_txb2Yo
 
-Presantation: https://prezi.com/view/SbkpNYEnL88hG5LX8X1z/
+Presentation: https://prezi.com/view/SbkpNYEnL88hG5LX8X1z/
 
 Jump dicectly to:
 - [documentation](#How-to-use-it-(documentation))
